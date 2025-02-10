@@ -1,0 +1,34 @@
+/// Управление
+input_x = 0;
+if (keyboard_check(vk_left)) input_x -= 1;
+if (keyboard_check(vk_right)) input_x += 1;
+
+// Гравитация
+input_y += 0.5; // Настроить гравитацию
+
+// Прыжок
+if (keyboard_check_pressed(vk_up)) {
+    if (move_collide(0, 1, my_tile)) {
+        input_y = -8; // Прыжок от пола
+    }
+    else if (move_collide(4 * input_x, 0, my_tile)) {
+        input_y = -6; // Прыжок от стены
+        input_x = -input_x * 4; // Отталкиваемся
+    }
+}
+
+// Горизонтальное движение
+input_x *= 3; // Скорость передвижения
+
+// Проверка столкновений с тайлами
+input_x = move_collide(input_x, 0, my_tile);
+input_y = move_collide(0, input_y, my_tile);
+
+// Применение движения
+x += input_x;
+y += input_y;
+
+// Скольжение по стенам
+if (move_collide(input_x, 0, my_tile) && input_y > 0) {
+    input_y *= 0.5; // Замедление падения по стенке
+}
