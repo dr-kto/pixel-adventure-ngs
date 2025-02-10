@@ -3,7 +3,7 @@ event_inherited()
 input_y += 0.5; // Настроить гравитацию
 
 // Проверка, находимся ли мы на земле
-var onTheGround = place_meeting(x, y + 1, my_tile);
+var onTheGround = place_meeting(x, y + 2, my_tile); // Увеличенная зона проверки
 var onTheSpike = place_meeting(x, y, o_spike);
 var onTheFlag = place_meeting(x, y, o_flag);
 var jumping = keyboard_check(vk_space);
@@ -14,10 +14,11 @@ input_x = keyboard_check(ord("D")) - keyboard_check(ord("A"));
 // Гравитация: если персонаж на земле, скорость по Y сбрасывается
 if (onTheGround) {
     input_y = 0;
-    // Обрабатываем прыжок
     if (jumping) {
         input_y = -8; // Прыжок от пола
     }
+} else if (input_y > 0 && input_y < 0.5) { // Минимальная скорость падения
+    input_y = 0.9;
 }
 
 // Прыжок от стены
@@ -68,4 +69,4 @@ if (onTheFlag) {
     room_goto_next(); // Переход на следующий уровень
 }
 
-move_and_collide(input_x, input_y, my_tile)
+move_and_collide(input_x, input_y, my_tile);
