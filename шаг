@@ -2,3 +2,30 @@ var _hor = clamp(target_x - x, -1, 1)
 var _ver = clamp(target_y - y, -1, 1)
 
 move_and_collide(_hor * m_speed, _ver * m_speed, tilemap)
+
+
+
+if keyboard_check(vk_space) {
+    var enemy = instance_nearest(x, y, o_enemy); // Найти ближайшего врага
+    if enemy != noone && point_distance(x, y, enemy.x, enemy.y) < 40 {
+        enemy.hp -= 1;
+        enemy.sprite_index = bat_attack;
+        
+        if enemy.hp <= 0 {
+            instance_destroy(enemy); // Удаляем только ближайшего
+        }
+    }
+}
+
+if keyboard_check(vk_space) {
+    var box = instance_nearest(x, y, o_box); // Найти ближайшего врага
+    if box != noone && point_distance(x, y, box.x, box.y) < 40 {
+        box.hp -= 1;
+        box.sprite_index = s_box_hit;
+        
+        if box.hp <= 0 {
+            instance_destroy(box); // Удаляем только ближайшего
+			instance_create_layer(x, y, "Instances", o_heart);
+        }
+    }
+}
